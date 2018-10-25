@@ -1,0 +1,21 @@
+FROM ubuntu:14.04
+
+label maintainer="michael.neish@canada.ca"
+
+# Some dependencies needed for the server.
+RUN apt-get update && apt-get install -y git make libssl-dev ksh gfortran libopenmpi-dev python liburi-perl wget libncurses5-dev libc6-dev-i386 openmpi-bin
+
+RUN groupadd -g $GID ssm
+RUN useradd -g ssm -u $UID -m ssm
+USER ssm
+
+WORKDIR /home/ssm
+RUN git clone https://github.com/mfvalin/rmnlib-install.git 
+WORKDIR /home/ssm/rmnlib-install
+RUN git fetch && git checkout 9c6f8bc3ea243b935af8c7e11f4553bca8724c6f
+# Quick fix for compiling new rpncomm
+# (number of objects has changed).
+RUN sed -i 's/99/98/g' rpncomm_4.5.16_linux26-x86-64/bin/install_rpn_comm.sh
+
+CMD ["make", "auto-install"]
+
