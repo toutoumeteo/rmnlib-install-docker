@@ -4,7 +4,7 @@ To build:
 ```sh
 # Docker is required for the build process.
 # You may need to adapt this command for the package manager of your distro.
-sudo apt-get installer docker.io
+sudo apt-get install docker.io
 
 # The Makefile will take care of the rest.
 make
