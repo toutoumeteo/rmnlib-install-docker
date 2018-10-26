@@ -1,18 +1,16 @@
 FROM ubuntu:14.04
 
-label maintainer="michael.neish@canada.ca"
+LABEL upstream-source="https://github.com/mfvalin/rmnlib-install"
+LABEL source="https://github.com/neishm/rmnlib-install-docker"
 
 # Some dependencies needed for the server.
 RUN apt-get update && apt-get install -y git make libssl-dev ksh gfortran libopenmpi-dev python liburi-perl wget libncurses5-dev libc6-dev-i386 openmpi-bin
 
 # Create non-privileged account for compiling and installing ssm packages.
+# Use the same userid and groupid as the host user to make it easier to
+# mount volumes and do file I/O with the host system.
 RUN groupadd -g $GID ssm
 RUN useradd -g ssm -u $UID -m ssm
-
-COPY GIT_CACHE /home/ssm/GIT_CACHE
-COPY SSM_CACHE /home/ssm/SSM_CACHE
-COPY ssm-domains-base /home/ssm/ssm-domains-base
-RUN chown ssm.ssm -R /home/ssm
 
 USER ssm
 
@@ -20,6 +18,11 @@ USER ssm
 WORKDIR /home/ssm
 RUN git clone https://github.com/mfvalin/rmnlib-install.git 
 WORKDIR /home/ssm/rmnlib-install
-RUN git fetch && git checkout ec64048c5cc2dc60b7f01997f282a165041a583e
+RUN git fetch && git checkout 7abaa4ea96713c99d6eb140136fa6bccf423caf8
 RUN make auto-install
 
+# Set up the environment to load at login time.
+WORKDIR /home/ssm
+RUN echo . /home/ssm/ssm-domains-base/ssm_10.151/etc/ssm.d/profile >> .profile
+RUN echo . env-setup.dot >> .profile
+RUN echo . r.load.dot /home/ssm/ssm-domains-base/lib >> .profile
