@@ -22,4 +22,6 @@ WORKDIR /home/ssm/rmnlib-install
 RUN git fetch && git checkout 8f59c0452521dbb887a6c28aef413288bfdccc2b
 RUN env VGRID_RELEASE=6.4 make auto-install
 
+RUN echo . $HOME/.profile_armnlib >> $HOME/.bashrc
+RUN echo . r.load.dot dev/gfortran >> $HOME/.bashrc
 WORKDIR /home/ssm
