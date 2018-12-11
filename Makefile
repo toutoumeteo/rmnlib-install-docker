@@ -1,5 +1,5 @@
 default: 18.04
-default: EXTRA_TAGS=--tag rmnlib-install
+18.04: EXTRA_TAGS=--tag rmnlib-install
 
 all: 16.04 18.04
 
