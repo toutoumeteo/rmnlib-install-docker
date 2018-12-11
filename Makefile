@@ -1,5 +1,5 @@
 defaut: Dockerfile
-	sudo docker build --tag rmnlib-install .
+	sudo docker build --tag rmnlib-install-18.04 .
 
 Dockerfile: Dockerfile.template
 	echo "# Auto-generated from $< - do not edit!\n" > $@
