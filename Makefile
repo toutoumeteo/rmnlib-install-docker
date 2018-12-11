@@ -1,6 +1,10 @@
-defaut: Dockerfile
-	sudo docker build --tag rmnlib-install-18.04 .
+default: 18.04
+default: EXTRA_TAGS=--tag rmnlib-install
 
-Dockerfile: Dockerfile.template
-	echo "# Auto-generated from $< - do not edit!\n" > $@
-	sed 's/$$UID/'`id -u`'/;s/$$GID/'`id -g`'/' $< >> $@
+all: 16.04 18.04
+
+%.04: Dockerfile.template
+	echo "# Auto-generated from $< - do not edit!\n" > Dockerfile
+	sed 's/$$DISTRO/ubuntu:$@/;s/$$UID/'`id -u`'/;s/$$GID/'`id -g`'/' $< >> Dockerfile
+	sudo docker build --tag rmnlib-install-$@ $(EXTRA_TAGS) .
+
