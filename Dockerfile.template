@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM $DISTRO
 
 LABEL upstream-source="https://github.com/mfvalin/rmnlib-install"
 LABEL source="https://github.com/neishm/rmnlib-install-docker"
